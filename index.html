@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📣 Denuncias Vecinales - Challapata</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        background-color: #0b0b0b;
+        color: #e0e0e0;
+    }
+
+    header {
+        background: #1a1a1a;
+        color: #fff;
+        text-align: center;
+        padding: 2rem 1rem;
+        border-bottom: 2px solid #444;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 2rem;
+    }
+
+    header p {
+        color: #999;
+    }
+
+    nav {
+        display: flex;
+        justify-content: center;
+        background: #151515;
+        padding: 0.8rem;
+        border-bottom: 1px solid #333;
+    }
+
+    nav button {
+        background: #2b2b2b;
+        color: #ccc;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        margin: 0 0.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    nav button.active, nav button:hover {
+        background: #555;
+        color: #fff;
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    section {
+        background: #1a1a1a;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 700px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        display: none;
+        box-shadow: 0 0 10px rgba(0,0,0,0.6);
+    }
+
+    section.active {
+        display: block;
+    }
+
+    h2 {
+        text-align: center;
+        color: #fff;
+        margin-bottom: 1rem;
+    }
+
+    form label {
+        display: block;
+        margin-top: 1rem;
+        color: #ccc;
+    }
+
+    form input, form select, form textarea {
+        width: 100%;
+        padding: 0.7rem;
+        margin-top: 0.3rem;
+        border: 1px solid #444;
+        border-radius: 6px;
+        background: #0f0f0f;
+        color: #eee;
+    }
+
+    input[type="file"] {
+        background: #1c1c1c;
+        padding: 0.4rem;
+    }
+
+    button.enviar {
+        margin-top: 1rem;
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 0.8rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 100%;
+        transition: 0.3s;
+    }
+
+    button.enviar:hover {
+        background: #555;
+    }
+
+    .mensaje-exito {
+        display: none;
+        background: #2e7d32;
+        color: #c8e6c9;
+        padding: 0.7rem;
+        margin-top: 1rem;
+        text-align: center;
+        border-radius: 6px;
+    }
+
+    .denuncia, .comunicado {
+        background: #222;
+        border-left: 5px solid #666;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+
+    .denuncia img, .comunicado img {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-top: 0.6rem;
+    }
+
+    .acciones {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 0.6rem;
+    }
+
+    .like-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #000;
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .like-btn.liked {
+        color: #ff4444;
+    }
+
+    .comentarios {
+        margin-top: 0.8rem;
+        background: #111;
+        border-radius: 8px;
+        padding: 0.6rem;
+    }
+
+    .comentarios input {
+        width: 80%;
+        background: #222;
+        border: 1px solid #333;
+        color: #ddd;
+        padding: 0.4rem;
+        border-radius: 5px;
+    }
+
+    .comentarios button {
+        background: #444;
+        border: none;
+        color: #fff;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .comentarios button:hover {
+        background: #666;
+    }
+
+    .listaComentarios {
+        display: none;
+        margin-top: 0.5rem;
+    }
+
+    .listaComentarios p {
+        margin: 0.3rem 0;
+        font-size: 0.9rem;
+        color: #ccc;
+    }
+
+    footer {
+        text-align: center;
+        padding: 1rem;
+        background: #111;
+        color: #888;
+        font-size: 0.9rem;
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>📣 Denuncias Vecinales - Challapata</h1>
+    <p>Denuncia, comparte y mejora tu comunidad</p>
+</header>
+
+<nav>
+    <button id="btnRegistrar">📝 Registrar</button>
+    <button id="btnComunicados" class="active">📢 Comunicados</button>
+    <button id="btnDenuncias">⚖️ Denuncias</button>
+</nav>
+
+<main>
+    <!-- REGISTRAR -->
+    <section id="registrar">
+        <h2>📝 Registro de Usuario</h2>
+        <form id="formRegistrar">
+            <label>Nombre de usuario:</label>
+            <input type="text" id="usuario" required>
+            <label>Correo electrónico:</label>
+            <input type="email" id="email" required>
+            <label>Contraseña:</label>
+            <input type="password" id="password" required>
+            <button class="enviar" type="submit">Registrar</button>
+        </form>
+        <div id="mensajeRegistrar" class="mensaje-exito">✅ Registro exitoso</div>
+    </section>
+
+    <!-- COMUNICADOS -->
+    <section id="comunicados" class="active">
+        <h2>📢 Comunicados del Barrio</h2>
+        <form id="formComunicado">
+            <label>Título del comunicado:</label>
+            <input type="text" id="tituloComunicado" required>
+            <label>Descripción:</label>
+            <textarea id="descComunicado" rows="3" required></textarea>
+            <label>Foto (opcional):</label>
+            <input type="file" id="fotoComunicado" accept="image/*">
+            <button class="enviar" type="submit">Agregar Comunicado 📸</button>
+        </form>
+        <div id="mensajeComunicado" class="mensaje-exito">✅ Comunicado agregado</div>
+        <div id="listaComunicados"></div>
+    </section>
+
+    <!-- DENUNCIAS -->
+    <section id="denuncias">
+        <h2>⚖️ Denuncias Vecinales</h2>
+        <form id="formDenuncia">
+            <label>Nombre (opcional):</label>
+            <input type="text" id="nombre">
+            <label>Categoría:</label>
+            <select id="categoria" required>
+                <option value="">Selecciona una opción</option>
+                <option>Ruido excesivo</option>
+                <option>Basura</option>
+                <option>Seguridad</option>
+                <option>Otros</option>
+            </select>
+            <label>Descripción:</label>
+            <textarea id="descripcion" rows="3" required></textarea>
+            <label>Foto (opcional):</label>
+            <input type="file" id="fotoDenuncia" accept="image/*">
+            <button class="enviar" type="submit">Enviar Denuncia 🚀</button>
+        </form>
+        <div id="mensajeDenuncia" class="mensaje-exito">✅ ¡Denuncia enviada!</div>
+        <div id="listaDenuncias"></div>
+    </section>
+</main>
+
+<footer>© 2025 Municipalidad de Challapata 🖤</footer>
+
+<script>
+    // Cambio de pestañas
+    const btnRegistrar = document.getElementById('btnRegistrar');
+    const btnComunicados = document.getElementById('btnComunicados');
+    const btnDenuncias = document.getElementById('btnDenuncias');
+
+    const seccionRegistrar = document.getElementById('registrar');
+    const seccionComunicados = document.getElementById('comunicados');
+    const seccionDenuncias = document.getElementById('denuncias');
+
+    btnRegistrar.onclick = () => cambiarSeccion(btnRegistrar, seccionRegistrar);
+    btnComunicados.onclick = () => cambiarSeccion(btnComunicados, seccionComunicados);
+    btnDenuncias.onclick = () => cambiarSeccion(btnDenuncias, seccionDenuncias);
+
+    function cambiarSeccion(boton, seccion) {
+        document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+        boton.classList.add("active");
+        seccion.classList.add("active");
+    }
+
+    // Mostrar mensajes
+    function mostrarMensaje(id) {
+        const msg = document.getElementById(id);
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 2500);
+    }
+
+    // Formularios
+    document.getElementById('formRegistrar').onsubmit = e => {
+        e.preventDefault();
+        mostrarMensaje('mensajeRegistrar');
+        e.target.reset();
+    };
+
+    document.getElementById('formComunicado').onsubmit = e => {
+        e.preventDefault();
+        const titulo = document.getElementById('tituloComunicado').value;
+        const desc = document.getElementById('descComunicado').value;
+        const foto = document.getElementById('fotoComunicado').files[0];
+
+        const div = document.createElement('div');
+        div.classList.add('comunicado');
+        div.innerHTML = `<strong>${titulo}</strong><p>${desc}</p>`;
+        if (foto) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(foto);
+            div.appendChild(img);
+        }
+        document.getElementById('listaComunicados').prepend(div);
+        mostrarMensaje('mensajeComunicado');
+        e.target.reset();
+    };
+
+    document.getElementById('formDenuncia').onsubmit = e => {
+        e.preventDefault();
+        const nombre = document.getElementById('nombre').value || 'Anónimo';
+        const categoria = document.getElementById('categoria').value;
+        const desc = document.getElementById('descripcion').value;
+        const foto = document.getElementById('fotoDenuncia').files[0];
+
+        const div = document.createElement('div');
+        div.classList.add('denuncia');
+        div.innerHTML = `
+            <strong>${categoria}</strong> - <small>${nombre}</small>
+            <p>${desc}</p>
+            <div class="acciones">
+                <button class="like-btn">❤️ <span>0</span></button>
+                <button class="ver-comentarios">💬 0 comentarios</button>
+            </div>
+            <div class="comentarios">
+                <input type="text" placeholder="Escribe un comentario...">
+                <button class="enviar-comentario">Enviar</button>
+                <div class="listaComentarios"></div>
+            </div>`;
+
+        if (foto) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(foto);
+            div.appendChild(img);
+        }
+
+        // Likes
+        const likeBtn = div.querySelector('.like-btn');
+        likeBtn.onclick = () => {
+            likeBtn.classList.toggle('liked');
+            const span = likeBtn.querySelector('span');
+            let count = parseInt(span.textContent);
+            span.textContent = likeBtn.classList.contains('liked') ? count + 1 : count - 1;
+        };
+
+        // Comentarios
+        const verComentarios = div.querySelector('.ver-comentarios');
+        const listaComentarios = div.querySelector('.listaComentarios');
+        const enviarComentario = div.querySelector('.enviar-comentario');
+        const inputComentario = div.querySelector('.comentarios input');
+        let totalComentarios = 0;
+
+        enviarComentario.onclick = () => {
+            const texto = inputComentario.value.trim();
+            if (texto) {
+                const p = document.createElement('p');
+                p.textContent = "💬 " + texto;
+                listaComentarios.appendChild(p);
+                inputComentario.value = '';
+                totalComentarios++;
+                verComentarios.textContent = `💬 ${totalComentarios} comentarios`;
+            }
+        };
+
+        verComentarios.onclick = () => {
+            listaComentarios.style.display = listaComentarios.style.display === 'block' ? 'none' : 'block';
+        };
+
+        document.getElementById('listaDenuncias').prepend(div);
+        mostrarMensaje('mensajeDenuncia');
+        e.target.reset();
+    };
+</script>
+</body>
+</html>
